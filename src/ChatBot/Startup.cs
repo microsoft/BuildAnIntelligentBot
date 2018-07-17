@@ -2,17 +2,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Bot.Builder.Ai.LUIS;
-using Microsoft.Bot.Builder.Ai.QnA;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Builder.PersonalityChat;
-using Microsoft.Bot.Builder.PersonalityChat.Core;
 using Microsoft.Bot.Builder.TraceExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ChatBot.Models;
+using ChatBot.TranslatorSpeech;
 
 namespace ChatBot
 {
@@ -70,34 +67,6 @@ namespace ChatBot
                 // IStorage dataStore = new Microsoft.Bot.Builder.Azure.AzureBlobStorage("AzureBlobConnectionString", "containerName");
 
                 options.Middleware.Add(new ConversationState<ReservationData>(dataStore));
-
-                options.Middleware.Add(
-                    new LuisRecognizerMiddleware(
-                        new LuisModel(
-                            "eceb8028-4c8a-4145-83de-a892f5916ab3",
-                            "261f05d278a14c15a35e68c836f50873",
-                            new Uri("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/"))
-                    ));
-
-                options.Middleware.Add(
-                  new QnAMakerMiddleware(
-                    new QnAMakerEndpoint
-                    {
-                        Host = "https://qna-ttmb.azurewebsites.net/qnamaker/",
-                        EndpointKey = "cfb284a3-b96f-4176-85c1-4a763e3db116",
-                        KnowledgeBaseId = "2bf8c1ce-a8a8-4267-a389-f6e835fc5353"
-                    },
-                    new QnAMakerMiddlewareOptions
-                    {
-                        EndActivityRoutingOnAnswer = true,
-                        ScoreThreshold = 0.9f
-                    }));
-
-                var personalityChatOptions = new PersonalityChatMiddlewareOptions(
-                    respondOnlyIfChat: true,
-                    scoreThreshold: 0.5F,
-                    botPersona: PersonalityChatPersona.Humorous);
-                options.Middleware.Add(new PersonalityChatMiddleware(personalityChatOptions));
             });
         }
 

@@ -3,6 +3,7 @@ export interface ICognitiveServicesSpeechSynthesisProperties {
     subscriptionKey?: string;
     gender?: SynthesisGender;
     voiceName?: string;
+    customVoiceEndpointUrl?: string;
     fetchCallback?: (authFetchEventId: string) => Promise<string>;
     fetchOnExpiryCallback?: (authFetchEventId: string) => Promise<string>;
 }

@@ -1,56 +1,98 @@
 ﻿using ChatBot.Models;
-using Microsoft.Extensions.Options;
 using System;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace ChatBot.Services
 {
     public class TextToSpeechService
     {
-        private const string CacheKey = "1";
-
-        private readonly string _voiceFontUri;
-        private readonly string _voiceFontName;
-
-        public TextToSpeechService(IOptions<MySettings> config)
+        public string GenerateSsml(string message, string language)
         {
-            _voiceFontUri = config.Value.VoiceFontUri;
-            _voiceFontName = config.Value.VoiceFontName;
-        }
-
-        public string GenerateSsml(string message, bool useCustomVoiceFont = false)
-        {
-            // TODO: If web socket works for Custom Voice, simplify the TextToSpeechRequest class
-            var options = useCustomVoiceFont
-                ? new TextToSpeechRequest.VoiceFontInputOptions(_voiceFontUri, _voiceFontName, message, null) as TextToSpeechRequest.InputOptions
-                : new TextToSpeechRequest.BingInputOptions(BotConstants.EnglishLanguage, TextToSpeechRequest.BingInputOptions.GenderFemale, message, null);
-            return options.GenerateSsml();
-        }
-
-        internal static string ByteToHexBit(byte[] bytes)
-        {
-            // Based on https://stackoverflow.com/questions/311165/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-and-vice-versa/14333437#14333437
-            var c = new char[bytes.Length * 2];
-            for (var i = 0; i < bytes.Length; i++)
+            try
             {
-                var b = bytes[i] >> 4;
-                c[i * 2] = (char)(55 + b + (((b - 10) >> 31) & -7));
-                b = bytes[i] & 0xF;
-                c[(i * 2) + 1] = (char)(55 + b + (((b - 10) >> 31) & -7));
+                // Voice Fonts don't support SSML right now so let's strip out tags
+                var messageDoc = XDocument.Parse($"<root>{message}</root>");
+                message = string.Join(" ", messageDoc.Descendants().Where(x => !x.HasElements && !string.IsNullOrEmpty(x.Value)).Select(x => x.Value?.Trim()));
+            }
+            catch (Exception)
+            {
             }
 
-            return new string(c);
+            var voice = GetLocaleVoiceName(language, BotConstants.GenderFemale);
+
+#pragma warning disable SA1118 // Parameter must not span multiple lines
+            XNamespace ns = "http://www.w3.org/2001/10/synthesis";
+            var ssmlDoc = new XDocument(
+                new XElement(
+                    ns + "speak",
+                    new XAttribute("version", "1.0"),
+                    new XAttribute(XNamespace.Xmlns + "mstts", "http://www.w3.org/2001/mstts"),
+                    new XAttribute(XNamespace.Xmlns + "emo", "http://www.w3.org/2009/10/emotionml"),
+                    new XAttribute(XNamespace.Xml + "lang", voice.Key),
+                    new XElement(
+                        ns + "voice",
+                        new XAttribute("name", voice.Value),
+                        new XRaw(message))));
+
+            return ssmlDoc.ToString();
+#pragma warning restore SA1118 // Parameter must not span multiple lines
         }
 
-        private string GenerateHash(string message, string locale, params string[] others)
+        private KeyValuePair<string, string> GetLocaleVoiceName(string language, string gender)
         {
-            var sha = new SHA256Managed();
-            var othersCombined = string.Join("__", others);
-            var hash = sha.ComputeHash(Encoding.UTF8.GetBytes($"{CacheKey}_{locale}__{message}__{othersCombined}"));
-            return ByteToHexBit(hash);
+            var dictionary = new Dictionary<string, KeyValuePair<string, string>>();
+
+            // List here: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages
+            const string prefix = "Microsoft Server Speech Text to Speech Voice";
+            if (BotConstants.GenderMale.Equals(gender))
+            {
+                dictionary["en"] = new KeyValuePair<string, string>("en-US", $"{prefix} (en-US, BenjaminRUS)");
+                dictionary["es"] = new KeyValuePair<string, string>("es-ES", $"{prefix} (es-ES, Pablo, Apollo)");
+                dictionary["fr"] = new KeyValuePair<string, string>("fr-FR", $"{prefix} (fr-FR, Paul, Apollo)");
+                dictionary["de"] = new KeyValuePair<string, string>("de-DE", $"{prefix} (de-DE, Stefan, Apollo)");
+                dictionary["ja"] = new KeyValuePair<string, string>("ja-JP", $"{prefix} (ja-JP, Ichiro, Apollo)");
+                dictionary["ru"] = new KeyValuePair<string, string>("ru-RU", $"{prefix} (ru-RU, Pavel, Apollo)");
+                dictionary["zh"] = new KeyValuePair<string, string>("zh-CN", $"{prefix} (zh-CN, Kangkang, Apollo)");
+            }
+            else
+            {
+                dictionary["en"] = new KeyValuePair<string, string>("en-US", $"{prefix} (en-US, JessaRUS)");
+                dictionary["es"] = new KeyValuePair<string, string>("es-ES", $"{prefix} (es-ES, Laura, Apollo)");
+                dictionary["fr"] = new KeyValuePair<string, string>("fr-FR", $"{prefix} (fr-FR, Julie, Apollo)");
+                dictionary["de"] = new KeyValuePair<string, string>("de-DE", $"{prefix} (de-DE, Hedda)");
+                dictionary["ja"] = new KeyValuePair<string, string>("ja-JP", $"{prefix} (ja-JP, Ayumi, Apollo)");
+                dictionary["ru"] = new KeyValuePair<string, string>("ru-RU", $"{prefix} (ru-RU, Irina, Apollo)");
+                dictionary["zh"] = new KeyValuePair<string, string>("zh-CN", $"{prefix} (zh-CN, Yaoyao, Apollo)");
+            }
+
+            dictionary["it"] = new KeyValuePair<string, string>("it-IT", $"{prefix} (it-IT, Cosimo, Apollo)");
+            dictionary["ar"] = new KeyValuePair<string, string>("ar-EG", $"{prefix} (ar-EG, Hoda)");
+            dictionary["hi"] = new KeyValuePair<string, string>("hi-IN", $"{prefix} (hi-IN, Kalpana, Apollo)");
+            dictionary["ko"] = new KeyValuePair<string, string>("ko-KR", $"{prefix} (ko-KR,HeamiRUS)");
+            dictionary["pt"] = new KeyValuePair<string, string>("pt-BR", $"{prefix} (pt-BR, Daniel, Apollo)");
+
+            var key = language.Split("-")[0];
+            if (dictionary.ContainsKey(key))
+            {
+                return dictionary[key];
+            }
+
+            return dictionary["en"];
+        }
+
+        private class XRaw : XText
+        {
+            public XRaw(string text)
+              : base(text)
+            {
+            }
+
+            public override void WriteTo(System.Xml.XmlWriter writer)
+            {
+                writer.WriteRaw(Value);
+            }
         }
     }
 }

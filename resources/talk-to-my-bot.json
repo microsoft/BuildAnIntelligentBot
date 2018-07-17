@@ -6,6 +6,9 @@
   "culture": "en-us",
   "intents": [
     {
+      "name": "GetDiscounts"
+    },
+    {
       "name": "None"
     },
     {
@@ -35,6 +38,21 @@
   "regex_features": [],
   "patterns": [],
   "utterances": [
+    {
+      "text": "are there any discounts available?",
+      "intent": "GetDiscounts",
+      "entities": []
+    },
+    {
+      "text": "do you have any discount for today?",
+      "intent": "GetDiscounts",
+      "entities": []
+    },
+    {
+      "text": "do you have any discounts?",
+      "intent": "GetDiscounts",
+      "entities": []
+    },
     {
       "text": "i need a table for three",
       "intent": "ReserveTable",
