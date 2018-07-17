@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link href="./lib/botchat.css" rel="stylesheet" />
+  <link href="./styles/fonts.css" rel="stylesheet" />
+  <link href="./styles/normalize.css" rel="stylesheet" />
+  <link href="./styles/app.css" rel="stylesheet" />
+  <script src="./lib/botchat.js"></script>
+  <script src="./lib/CognitiveServices.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <h1>Bot Recognition API Settings</h1>
+    <form>
+      <div class="field-groups">
+        <div class="field-group left">
+          <label>
+            <input type="radio" name="recognition-api" value="0" />
+            <span>Bing Speech</span>
+          </label>
+          <label>
+            <input type="radio" name="recognition-api" value="1" />
+            <span>Custom Speech</span>
+          </label>
+        </div>
+
+        <div class="field-group right">
+          <label>
+            <input type="checkbox" name="botchat-debug" />
+            <span>See bot debug messages in console</span>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <div id="bot"></div>
+  </div>
+
+  <script>
+    const defaultBingSubscriptionKey = "ec4acf55ff114c5ba19a082e4317a147";
+    const defaultCustomEndpointId = "607181f4-a238-4178-8a0e-79db619248a5";
+    const defaultCustomSubscriptionKey = "ccb93ca605e1428980d931e0d4c19f6f";
+
+    function getBotConfig() {
+      const debug = document.querySelector('input[name="botchat-debug"]').checked;
+      const recoginitionAPICheckedInput = document.querySelector(
+        'input[name="recognition-api"]:checked'
+      );
+      const recognitionAPI =
+        recoginitionAPICheckedInput && parseInt(recoginitionAPICheckedInput.value);
+
+      // Validate
+      if (!recoginitionAPICheckedInput) {
+        return new Error(`Please select a recognition API (Bing Speech or Custom Speech)`);
+      }
+
+      if (recognitionAPI === 1) {
+        // Custom Speech selected
+        endpointId = defaultCustomEndpointId;
+        subscriptionKey = defaultCustomSubscriptionKey;
+      } else {
+        // Bing Speech selected
+        endpointId = "";
+        subscriptionKey = defaultBingSubscriptionKey;
+      }
+
+      return {
+        recognitionAPI,
+        subscriptionKey,
+        endpointId,
+        debug,
+      };
+    }
+
+    function removeBot() {
+      const newBotContainer = document.createElement('div');
+      const appContainer = document.querySelector('#container');
+      const botContainer = document.querySelector('#bot');
+      newBotContainer.setAttribute('id', 'bot');
+      appContainer.removeChild(botContainer);
+      appContainer.appendChild(newBotContainer);
+    }
+
+    function launchBot(config) {
+      const { recognitionAPI, subscriptionKey, endpointId, debug } = config;
+      window.botchatDebug = debug;
+      let speechRecognizer;
+      let speechSynthesizer;
+
+      if (debug) {
+        console.info('\n\n=> Launching bot ...');
+        console.info('Bot config: ', config);
+      }
+
+      const user = {
+        id: 'userid',
+        name: 'username',
+      };
+
+      const bot = {
+        id: 'botid',
+        name: 'botname',
+      };
+
+      if (recognitionAPI === 0) {
+        // Bing Speech
+        speechRecognizer = new CognitiveServices.SpeechRecognizer({
+          subscriptionKey: subscriptionKey,
+        });
+        speechSynthesizer = new CognitiveServices.SpeechSynthesizer({
+          gender: CognitiveServices.SynthesisGender.Female,
+          subscriptionKey: subscriptionKey,
+          voiceName: 'Microsoft Server Speech Text to Speech Voice (en-US, JessaRUS)',
+        });
+      } else if (recognitionAPI === 1) {
+        // Custom Speech
+        speechRecognizer = new CognitiveServices.SpeechRecognizer({
+          subscriptionKey: subscriptionKey,
+          recognitionAPI: 1,
+          endpointId: endpointId,
+        });
+      }
+
+      const speechOptions = {
+        speechRecognizer,
+        speechSynthesizer,
+      };
+
+      BotChat.App({
+          bot: bot,
+          locale: 'en-us',
+          user: user,
+          speechOptions: speechOptions,
+          resize: 'detect',
+          directLine: {
+              secret: 'Iek_yPkwjso.cwA.YGI.D2-o1qWmcgJbIYre-RZXvCZ0m064viRkglNm9Lplxs8',
+          webSocket: true,
+          },
+        },
+        document.getElementById('bot')
+      );
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const recognitionAPIRadios = document.querySelectorAll(
+        'input[name="recognition-api"]'
+      );
+      const recoginitionAPICheckedInput = document.querySelector(
+        'input[name="recognition-api"]:checked'
+      );
+      const recognitionAPIValue =
+        recoginitionAPICheckedInput && recoginitionAPICheckedInput.value;
+
+      recognitionAPIRadios.forEach(radio => {
+        radio.addEventListener('click', function(e) {
+          const config = getBotConfig();
+
+          if (config instanceof Error) {
+            alert(config.message);
+          } else {
+            removeBot();
+            launchBot(config);
+          }
+        });
+      });
+
+      launchBot({});
+    });
+
+  </script>
+</body>
+
+</html>

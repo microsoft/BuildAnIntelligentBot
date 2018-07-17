@@ -1,0 +1,78 @@
+<style>
+  :root {
+    font-size: 100%;
+    font-family: SegoeUI, Helvetica, Arial, sans-serif;
+  }
+
+  #container {
+    width: 96vw;
+    height: 96vh;
+    margin: 2vh 2vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #container h1 {
+    font-size: 1.4rem;
+    margin: 0.6rem 0;
+  }
+
+  #bot {
+    position: relative;
+    flex: 1;
+    border: 1px solid #0464b1;
+  }
+
+  form {
+    margin-bottom: 1.5rem;
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 4px;
+  }
+  form .field-groups {
+    display: flex;
+  }
+  form .field-group.left { width: 9rem; }
+  form .field-group.right { width: 36rem; }
+
+  form .field-group.right label.text {
+    display: flex;
+    align-items: center;
+  }
+  form .field-group.right label a {
+    display: inline-block;
+    flex: 1;
+    text-align: right;
+  }
+  form .field-group.right label input {
+    display: inline-block;
+    flex: 1;
+    margin-left: 8px;
+    padding: 3px 5px;
+    font-size: 0.9rem;
+  }
+  form .field-group.right label:last-of-type {
+    text-align: right;
+    margin-top: 0.6rem;
+  }
+  form .field-group.right a {
+    color: #0078d7;
+    text-decoration: none;
+  }
+
+  #applyBtn {
+    background-color: #0078d7;
+    color: white;
+    border: 0 none;
+    font-family: SegoeUI, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    padding: 0.4rem 1rem 0.6rem;
+    transition: background-color 0.4s;
+  }
+  #applyBtn:hover {
+    background-color: #035ca2;
+  }
+</style>
