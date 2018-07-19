@@ -8,6 +8,19 @@ namespace ChatBot.Services
 {
     public class TextToSpeechService
     {
+        private readonly string _voiceFontName;
+        private readonly string _voiceFontLanguage;
+
+        public TextToSpeechService()
+        {
+        }
+
+        public TextToSpeechService(string voiceFontName, string voiceFontLanguage)
+        {
+          this._voiceFontName = voiceFontName;
+          this._voiceFontLanguage = voiceFontLanguage;
+        }
+
         public string GenerateSsml(string message, string language)
         {
             try
@@ -20,7 +33,20 @@ namespace ChatBot.Services
             {
             }
 
-            var voice = GetLocaleVoiceName(language, BotConstants.GenderFemale);
+            var voiceName = string.Empty;
+            var voiceLanguage = string.Empty;
+            if (string.IsNullOrEmpty(_voiceFontName))
+            {
+              var voice = GetLocaleVoiceName(language, BotConstants.GenderFemale);
+              voiceName = voice.Value;
+              voiceLanguage = voice.Key;
+            }
+            else
+            {
+              voiceName = _voiceFontName;
+              voiceLanguage = _voiceFontLanguage;
+            }
+
 
 #pragma warning disable SA1118 // Parameter must not span multiple lines
             XNamespace ns = "http://www.w3.org/2001/10/synthesis";
@@ -30,10 +56,10 @@ namespace ChatBot.Services
                     new XAttribute("version", "1.0"),
                     new XAttribute(XNamespace.Xmlns + "mstts", "http://www.w3.org/2001/mstts"),
                     new XAttribute(XNamespace.Xmlns + "emo", "http://www.w3.org/2009/10/emotionml"),
-                    new XAttribute(XNamespace.Xml + "lang", voice.Key),
+                    new XAttribute(XNamespace.Xml + "lang", voiceLanguage),
                     new XElement(
                         ns + "voice",
-                        new XAttribute("name", voice.Value),
+                        new XAttribute("name", voiceName),
                         new XRaw(message))));
 
             return ssmlDoc.ToString();

@@ -6,8 +6,8 @@
 
         public string TranslatorTextSubscriptionKey { get; set; }
 
-        public string VoiceFontUri { get; set; }
-
         public string VoiceFontName { get; set; }
+
+        public string VoiceFontLanguage { get; set; }
     }
 }
