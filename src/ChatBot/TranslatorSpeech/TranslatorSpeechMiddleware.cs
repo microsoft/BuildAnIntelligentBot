@@ -17,7 +17,7 @@ namespace ChatBot.TranslatorSpeech
         private readonly TranslatorTextService _translatorTextService;
         private readonly TextToSpeechService _textToSpeechService;
 
-        public TranslatorSpeechMiddleware(string translatorSpeechKey, string translatorKey)
+        public TranslatorSpeechMiddleware(string translatorSpeechKey, string translatorKey, string voiceFontName, string voiceFontLanguage)
         {
             if (string.IsNullOrEmpty(translatorSpeechKey))
                 throw new ArgumentNullException(nameof(translatorSpeechKey));

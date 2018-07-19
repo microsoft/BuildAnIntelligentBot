@@ -178,15 +178,15 @@ function launchBot(config) {
     name: 'botname',
   };
 
+  speechSynthesizer = new CognitiveServices.SpeechSynthesizer({
+    subscriptionKey: subscriptionKey,
+    customVoiceEndpointUrl:
+    'https://westus.tts.speech.microsoft.com/cognitiveservices/v1',
+  });
   if (recognitionAPI === 0) {
     // Speech (preview)
     speechRecognizer = new CognitiveServices.SpeechRecognizer({
       subscriptionKey: subscriptionKey,
-    });
-    speechSynthesizer = new CognitiveServices.SpeechSynthesizer({
-      subscriptionKey: subscriptionKey,
-      customVoiceEndpointUrl:
-        'https://westus.tts.speech.microsoft.com/cognitiveservices/v1',
     });
   } else if (recognitionAPI === 1) {
     // Custom Speech

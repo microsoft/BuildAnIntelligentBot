@@ -31,7 +31,7 @@ Follow the next steps to install the *Bot Builder SDK V4 for Visual Studio* temp
 1. [] We will use Visual Studio 2017 with Bot template to develop a bot. If you don't have Visual Studio you can download it from the following URL given below.
     * Download Visual Studio 2017 from https://www.visualstudio.com/downloads/.
     * Refer Visual Studio 2017 system requirement from https://www.visualstudio.com/en-us/productinfo/vs2017-system-requirements-vs.
-1. [] Open **Microsoft Edge** and navigate to ++https://marketplace.visualstudio.com/items?itemName=BotBuilder.botbuilderv4++.
+1. [] Open **Microsoft Edge** and navigate to https://marketplace.visualstudio.com/items?itemName=BotBuilder.botbuilderv4.
 1. [] Click **Download**.
 1. [] When prompted, click **Open**.
 1. [] Click **Modify** and complete the template installation.
@@ -40,7 +40,7 @@ Follow the next steps to install the *Bot Builder SDK V4 for Visual Studio* temp
 
 Follow the next steps to download the sample code provided for this lab, it includes a prebuilt React front-end that uses the *Bot Framework Web Chat* component and a Chat Bot based in the *Bot Builder SDK V4 for Visual Studio* template.
 
-1. [] Open **Microsoft Edge** and navigate to ++https://aka.ms/botframeworklab++.
+1. [] Open **Microsoft Edge** and navigate to https://aka.ms/botframeworklab.
 1. [] When prompted, click **Open**.
 1. [] Click **Extract** and then **Extract all**.
 1. [] Click **Browse...** and then **Downloads**.
@@ -50,8 +50,8 @@ Follow the next steps to download the sample code provided for this lab, it incl
 
 Follow the next steps to install the *Bot Framework Emulator V4*, if you already have it you can skip this section.
 
-1. [] Open **Microsoft Edge** and navigate to ++https://github.com/Microsoft/Bot Framework Emulator/releases++.
-1. [] Download the lastest *4.x* version available.
+1. [] Open **Microsoft Edge** and navigate to https://github.com/Microsoft/BotFramework-Emulator/releases.
+1. [] Download the `exe` file of the latest *4.x* version available.
 1. [] When prompted, click **Open**.
 1. [] Complete the installation.
 
@@ -75,15 +75,17 @@ Let's create a basic bot using the SDK V4, we'll run it locally in Visual Studio
 
 The bot emulator provides a convenient way to interact and debug your bot locally.
 
-1. [] Open **EchoBot.cs** from the **Bots** folder.
+1. [] Open the **EchoBot.cs** file.
 1. [] Put a **breakpoint** on line 31.
-1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
+1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon) if it's not running already.
 
     > [!NOTE] A new web page with the Web Chat will be opened in your browser. Don't use this one yet as we'll configure it later.
 1. [] Open the **Bot Framework Emulator** from the Start Menu.
-1. [] Click **Open** and select the file `ChatBot.bot` from your source code.
+1. [] Click **Open Bot** and select the file `ChatBot.bot` from your source code.
 
     > [!NOTE] Previously we had to provide the bot endpoint to the emulator but now it can read all the configuration from a file.
+1. [] If the app is not running on port **3978** you need to update the Bot configuration in the emulator. Check the address in the browser windows to confirm the port that the app is using.
+1. If the port is different, right click the **ChatBot** option under **ENDPOINT** and click on the **Edit settings** option. Check the **Endopoint url** configuration and change the port in the address to correspond to the port that the app is using.
 1. [] **Type** ++Hello++ and press enter.
 1. [] Return to **Visual Studio** and wait for the breakpoint to be hit.
 1. [] **Mouse over** the `context.Activity.Text` variable to see your input message.
@@ -96,7 +98,13 @@ The bot emulator provides a convenient way to interact and debug your bot locall
 
 Notice that when you start a conversation the bot is not showing any initial message, let's add a welcome message to display it to the user at the beginning of the conversations:
 
-1. [] Open **EchoBot.cs** and modify the `OnTurn` method, add the following *else if* to the end of the method:
+1. [] Open the **EchoBot.css** file and add the following import at the beginning of the file:
+
+    ```cs
+    using System.Linq;
+    ```
+
+1. [] Modify the `OnTurn` method, add the following *else if* to the end of the method:
 
     ```cs
     else if (context.Activity.Type == ActivityTypes.ConversationUpdate && context.Activity.MembersAdded.FirstOrDefault()?.Id == context.Activity.Recipient.Id)
@@ -145,11 +153,11 @@ Create the LUIS resource in Azure:
 
 Before calling LUIS, we need to train it with the kinds of phrases we expect our users to use.
 
-1. [] Login to the **LUIS portal** (++www.luis.ai++).
+1. [] Login to the [LUIS portal](www.luis.ai).
 
     > [!NOTE] Use the same credentials as you used for logging into Azure.
 1. [] **Scroll down** to the bottom of the welcome page.
-1. [] Click **Create an app**.
+1. [] Click **Create new app**.
 1. [] Select **United States** from the country list.
 1. [] Check the **I agree** checkbox.
 1. [] Click the **Continue** button.
@@ -159,25 +167,25 @@ Before calling LUIS, we need to train it with the kinds of phrases we expect our
 1. [] **Wait** for the import to complete.
 1. [] Click on the **Train** button and wait for it to finish.
 1. [] Click the **Test** button to open the test panel.
-1. [] **Type** ++I need a dinner reservation++ and press enter.
+1. [] **Type** `I need a dinner reservation` and press enter.
 
     > [!NOTE] It should return the `ReserveTable` intent.
 1. [] Click the **Test** button in the top right to close the test panel.
 1. [] Add a **new intent**:
     * Click on **Intents**.
     * Click on **Create new intent**.
-    * Type the new intent name: ++TodaysSpecialty++
+    * Type the new intent name: `TodaysSpecialty`
     * Click **Done**.
 1. [] Add a new **utterance**:
-    * Type: ++what is the specialty for today?++
+    * Type: `what is the specialty for today?`
     * Press **Enter**.
 1. [] Add another new **utterance**:
-    * Type: ++what's the dish of the day?++
+    * Type: `what's the dish of the day?`
     * Press **Enter**.
 1. [] **Test** your new intent:
     * Click on the **Train** button and wait for it to finish.
     * Click on **Test** button.
-    * Type the following test utterance: ++what's today's special?++
+    * Type the following test utterance: `what's today's special?`
     * Press **Enter**.
 
         > [!NOTE] The test should return the `TodaysSpecialty` intent.
@@ -211,7 +219,7 @@ Now let's install the LUIS package from NuGet:
 
 1. [] Right click on the `ChatBot` project and click **Manage NuGet Packages**.
 1. [] Mark the **Include Prerelease** checkbox.
-1. [] Select the **Browse** tab and search for ++Microsoft.Bot.Builder.Ai.LUIS++.
+1. [] Select the **Browse** tab and search for `Microsoft.Bot.Builder.Ai.LUIS`.
 1. [] Click on the NuGet package, select the latest version and click **Install**.
 
 ### E) Add LUIS middleware to your bot
@@ -224,7 +232,7 @@ Like all of the Cognitive Services, LUIS is accessible via a RESTful endpoint. H
     ```cs
     using Microsoft.Bot.Builder.Ai.LUIS;
     ```
-1. [] **Add** the LUIS middleware to the `ConfigureServices` method *after* the ConversationState is added to the Middleware:
+1. [] **Add** the LUIS middleware to the `ConfigureServices` method inside the `services.AddBot<EchoBot>(options =>)` code and  *after* the ConversationState is added to the Middleware `options.Middleware.Add(new ConversationState<ReservationData>(dataStore));` arround line 71:
 
     ```cs
     options.Middleware.Add(
@@ -255,13 +263,14 @@ Modify the Bot code to handle the results from LUIS.
     {
         var result = context.Services.Get<RecognizerResult>(LuisRecognizerMiddleware.LuisRecognizerResultKey);
         var topIntent = result?.GetTopScoringIntent();
+        topIntent = topIntent != null &&    topIntent.Value.score < 0.5 ? null : topIntent;
 
         // Your code goes here
     }
     ```
 
     > [!NOTE] The first step is to extract the LUIS *intent* from the context. This is populated by the middleware.
-1. [] **Add** the following code snippet where indicated:
+1. [] **Replace** the recently added line `// Your code goes here` with the following code:
 
     ```cs
     switch (topIntent != null ? topIntent.Value.intent : null)
@@ -283,14 +292,17 @@ Modify the Bot code to handle the results from LUIS.
 Let's run the bot to see LUIS in action.
 
 1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
+1. Make sure that the app is running on port **3978** by checking the URL in the browser.
+1. If the port is different, make sure to change the settings in the Bot like it was indicating before.
 1. [] Return to the **Bot Framework Emulator**.
 1. [] Click **File** -> **Open**.
-1. [] Select the **bot file** `Downloads\talktomybotlab\src\ChatBot.bot` and wait for it to load.
+1. [] Select the **bot file** `Downloads/talktomybotlab/src/ChatBot/ChatBot.bot` and wait for it to load.
 
     > [!NOTE] We are now using the sample code therefore we have to open a new bot file.
 1. [] Click the **Start Over** button to start a new conversation.
-1. [] **Type** ++what is the specialty for today??++ and press enter.
+1. [] **Type** `what is the specialty for today?` and press enter.
 1. [] See the response, LUIS is processing our input and the bot can handle it accordingly.
+1. [] **Stop** debugging by clicking the stop button in VS toolbar.
 
 ## Customising your Bot
 
@@ -299,7 +311,7 @@ Let's run the bot to see LUIS in action.
 Bots are capable of interacting with users through more than just text-based chat. *TodaysSpecialties* intent allows customers to review the different options in the menu for today's recommendations. Currently, this method is returning the options as a simple text. Let's modify it and return a carousel.
 
 1. [] Open **EchoBot.cs**.
-1. [] **Add** the following method:
+1. [] **Add** the following method to the class around line 54:
 
     ```cs
     private async Task TodaysSpecialtiesHandler(ITurnContext context)
@@ -340,7 +352,7 @@ Let's run the bot to see how the bot displays the response using an advanced car
 1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 1. [] Return to the **Bot Framework Emulator**.
 1. [] Click the **Start Over** button to start a new conversation.
-1. [] Type ++What is today's specialty?++ and press **enter**.
+1. [] Type `What is today's specialty?` and press **enter**.
 1. [] The bot will display a set of food recommendations using images in a Carousel.
 1. [] **Stop** debugging by clicking the stop button in VS toolbar.
 
@@ -350,8 +362,9 @@ The *Dialogs* package from NuGet allows to build Dialog sets that can be used to
 
 1. [] Right click on the `ChatBot` project and click **Manage NuGet Packages**.
 1. [] Mark the **Include Prerelease** checkbox.
-1. [] Select the **Browse** tab and search for ++Microsoft.Bot.Builder.Dialogs++.
+1. [] Select the **Browse** tab and search for `Microsoft.Bot.Builder.Dialogs`.
 1. [] Click on the NuGet package, select the latest version and click **Install**.
+1. [] Finish the installation process.
 
 ### D) Setup the conversation flow
 
@@ -372,11 +385,11 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
 
     ```cs
     var state = context.GetConversationState<ReservationData>();
-    var dialogContext = dialogs.CreateContext(context, state);
+    var dialogContext = _dialogs.CreateContext(context, state);
     await dialogContext.Continue();
     ```
 
-    Also add the following case to the switch statement, before the **default** case:
+    Also add the following case to the `switch (topIntent != null ? topIntent.Value.intent : null)` statement, before the **default** case:
 
     ```cs
     case "ReserveTable":
@@ -385,6 +398,7 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
         ReservationHandler(dialogContext, amountPeople, time);
         break;
     ```
+    > [!NOTE] The missed methods will be added later.
 
 1. [] Add the following method to extract the reservation date:
 
@@ -407,10 +421,10 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
 1. [] **Add** the `ReservationHandler` method to start the conversation flow for the table reservation intent:
 
     ```cs
-    private async void ReservationHandler(DialogContext dialogContext, int amountPeople, string time)
+    private async void ReservationHandler(DialogContext dialogContext, string amountPeople, string time)
     {
         var state = dialogContext.Context.GetConversationState<ReservationData>();
-        state.AmountPeople = amountPeople.ToString();
+        state.AmountPeople = amountPeople;
         state.Time = time;
         await dialogContext.Begin(PromptStep.GatherInfo);
     }
@@ -430,11 +444,14 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
         public const string ConfirmationPrompt = "confirmationPrompt";
     }
     ```
-1. [] **Add** the variable at the beginning of the class: `private readonly DialogSet dialogs;`
+1. [] **Add** the variable at the beginning of the class**Add** the following variable at the beginning of the EchoBot class:
+    ```cs
+    private readonly DialogSet _dialogs;
+    ````
 1. [] **Add** the following constructor:
 
     ```cs
-    public EchoBot()
+    public EchoBot(IOptions<MySettings> config)
     {
         _dialogs = new DialogSet();
         _dialogs.Add(PromptStep.TimePrompt, new TextPrompt());
@@ -564,7 +581,7 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
                 msg = "Thanks for using the Contoso Assistance. See you soon!";
             }
 
-            await dialogContext.Context.SendActivity(msg, _ttsService.GenerateSsml(msg, BotConstants.EnglishLanguage));
+            await dialogContext.Context.SendActivity(msg);
         }
 
         await dialogContext.End(state);
@@ -591,7 +608,7 @@ Let's run the bot to see how LUIS processes the new conversation flow.
 1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 1. [] Return to the **Bot Framework Emulator**.
 1. [] Click the **Start Over** button to start a new conversation.
-1. [] Type ++I need a dinner reservation for tomorrow at 7:30 pm++ and press **enter**.
+1. [] Type `I need a dinner reservation for tomorrow at 7:30 pm` and press **enter**.
 1. [] Return to **Visual Studio** and wait for the breakpoint to be hit.
 1. [] **Mouse over** the `amountPeople` and `time` variables to inspect their content.
 
@@ -599,12 +616,12 @@ Let's run the bot to see how LUIS processes the new conversation flow.
 
 1. [] Press **Continue** in the toolbar.
 1. [] Return to the **Bot Framework Emulator**.
-1. [] The bot will request the amount of people in the reservation. Type a ++abc++ and press **enter**.
+1. [] The bot will request the amount of people in the reservation. Type a `abc` and press **enter**.
 
     > [!NOTE] Notice the validation message returned by the bot, in this case the amount has to be a number.
-1. [] Type a ++2++ and press **enter**.
-1. [] The bot will request the name of the reservation. Type a ++Jane Olson++ and press **enter**.
-1. [] The bot will request a confirmation. Type ++yes++ and pres **enter**.
+1. [] Type a `2` and press **enter**.
+1. [] The bot will request the name of the reservation. Type a `Jane Olson` and press **enter**.
+1. [] The bot will request a confirmation. Type `yes` and pres **enter**.
     > [!NOTE] At this point the conversation flow will be finished.
 1. [] **Stop** debugging by clicking the stop button in VS toolbar.
 1. [] **Remove** the breakpoint previously added.
@@ -618,7 +635,7 @@ While the Bot Builder SDK makes building sophisticated dialog flows easy, this w
 
 Setup your QnA Maker instance:
 
-1. [] Return to the **Azure Portal** (++portal.azure.com++).
+1. [] Return to the [Azure Portal](https://portal.azure.com)(portal.azure.com).
 1. [] Click **Create Resource [+]**  from the left menu and search for **QnA Maker**.
 1. [] **Select** the first result and then click the **Create** button.
 1. [] Provide the required information:
@@ -631,10 +648,9 @@ Setup your QnA Maker instance:
     * Website Location: `West US`
     * Application Insights Location: `West US 2`
 1. [] Click **Create** to deploy the service. This step might take a few moments.
-1. [] Log into the **QnA Maker portal** (++qnamaker.ai++) using your **Azure** credentials.
+1. [] Log into the [QnA Maker portal](https://qnamaker.ai)(qnamaker.ai) using your **Azure** credentials.
 1. [] Create a knowledge base:
     * Click on **Create a knowledge base**.
-    * Click on **Create new service**.
     * Scroll down to **Step 2**: Connect your QnA service to your KB.
     * Select the previously created Azure service.
     * Scroll down to **Step 3**: Name your KB.
@@ -645,11 +661,11 @@ Setup your QnA Maker instance:
 
     > [!NOTE] You will be redirected to the QnA dashboard and it will display the questions in you knowledge base, these are populated from the previously loaded file
 
-1. [] Click **Save and retrain**. This should take a minute.
+1. [] Click **Save and train**. This should take a minute.
 1. [] Click **Publish** to start the publishing process and then **Publish** again to confirm.
 1. [] From the sample HTTP request, get the:
-    * **URL** (it should be `https://qna-<your initials>.azurewebsites.net/qnamaker`)
-    * **SubscriptionKey** from the header
+    * **URL** from the Host (it should be `https://qna-<your initials>.azurewebsites.net/qnamaker`)
+    * **SubscriptionKey** from the `Authorization` header
     * **KnowledgeBaseId** from the URI (it's a GUID)
 
 ### C) Install QnA Maker package
@@ -657,7 +673,7 @@ Setup your QnA Maker instance:
 1. [] In Visual Studio, right click on the `ChatBot` project and click **Manage NuGet Packages**.
     > [!NOTE]  Make sure the **Include Prerelease** checkbox is selected.
 
-1. [] Select the Browse tab and search for ++Microsoft.Bot.Builder.Ai.QnA++.
+1. [] Select the Browse tab and search for `Microsoft.Bot.Builder.Ai.QnA`.
 1. [] Select the NuGet package, select the latest version and click **Install**.
 
 ### B) Add QnA Maker to the bot
@@ -696,7 +712,8 @@ The Bot Builder SDK has native support for adding QnA Maker to your bot.
 1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 1. [] Return to the **Bot Framework Emulator**.
 1. [] Click the **Start Over** button to start a new conversation.
-1. [] **Type** ++where are you located?++ and press **enter**.
+1. [] **Type** `where are you located?` and press **enter**.
+1. [] Check the response from the Bot using QnA Maker now.
 1. [] Return to **Visual Studio** and **stop** debugging by clicking the stop button in the toolbar.
 
 ## Implementing Personality Chat
@@ -708,7 +725,7 @@ Let's make our bot more user friendly by adding the Personality Chat. This cogni
 1. [] In Visual Studio, right click on the `ChatBot` project and click **Manage NuGet Packages**.
     > [!NOTE]  Make sure the **Include Prerelease** checkbox is selected.
 
-1. [] Select the Browse tab and search for ++Microsoft.Bot.Builder.PersonalityChat++.
+1. [] Select the Browse tab and search for `Microsoft.Bot.Builder.PersonalityChat`.
 1. [] Select the NuGet package, select the latest version and click **Install**.
 
 ### B) Add Personality Chat to the bot
@@ -740,9 +757,9 @@ The Bot Builder SDK has native support for adding QnA Maker to your bot.
 1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 1. [] Return to the **Botframework Emulator**.
 1. [] Click the **Start Over** button to start a new conversation.
-1. [] **Type** ++how old are you?++ and press **enter**. See the response from your bot.
+1. [] **Type** `how old are you?` and press **enter**. See the response from your bot.
 1. [] Return to **Visual Studio** and **stop** debugging by clicking the stop button in the toolbar.
-1. [] Try changing the personality from **Startup.cs** and see how the bot response changes accordingly to fit the selected personality.
+1. [] Try changing the personality from **Startup.cs** to be something like `botPersona: PersonalityChatPersona.Professional` and see how the bot response changes accordingly to fit the selected personality.
 
     > [!NOTE] Review the image below to see which utterances you can try and what output to expect in each case.
 
@@ -752,7 +769,7 @@ In this section we will enable speech in Web Chat to recognize speech and send t
 
 ### A) Create a Speech (preview) subscription
 
-1. [] Return to the Azure Portal (++portal.azure.com++).
+1. [] Return to the [Azure Portal](https://portal.azure.com)(portal.azure.com).
 1. [] Click **Create Resource [+]**  from the left menu and search for **Speech**.
 1. [] **Select** the *Speech (preview)* result and then click the **Create** button.
 1. [] Provide the required information:
@@ -773,7 +790,7 @@ In this section we will enable speech in Web Chat to recognize speech and send t
 
 The Azure Bot Service is an integrated offering for building and hosting bots. It pulls together the Microsoft Bot Framework for core bot functionality and Azure Web Apps for hosting. In this lab, we'll be using an Azure Web App to host our bot and use Direct Line Channel to integrate the Web Chat with the bot service.
 
-1. [] Log into the Azure Portal (++portal.azure.com++).
+1. [] Log into the [Azure Portal](https://portal.azure.com)(portal.azure.com).
 1. [] In the **New** blade, search for **Web App Bot**.
 1. [] **Select** the first result and then click the **Create** button.
 1. [] Provide the required information:
@@ -789,7 +806,7 @@ The Azure Bot Service is an integrated offering for building and hosting bots. I
 1. [] Click **Create New**.
 1. [] Provide the required information:
     * App Service plan name: `chatbot-<your initials>`
-    * Location: `West US`
+    * Location: `West US 2`
 1. [] Click **OK** to save the new App service plan.
 1. [] Click **Create** to deploy the service. This step might take a few moments.
 1. [] Once the deployment is completed you will see a **Deployment succeeded** notification.
@@ -810,8 +827,8 @@ Speech is available as a component called `SpeechRecognizer` in the Web Chat con
 1. [] Open **default.html** in the **wwwroot** folder.
 
     > [!NOTE] The web chat control has already been imported into the page, we just need to configure it. This Web Chat was modified to use the Speech (preview) websockets instead of the general Bing service.
-1. [] **Replace** the `direct-line-secret` from line 134 with the value on clipboard.
-1. [] **Replace** the Speech Subscription key `subscription-key` from line 43 with the value previously obtained from Azure.
+1. [] **Replace** the `direct-line-secret` from line 104 with the value on clipboard.
+1. [] **Replace** the Speech Subscription key `<your-speech-subscription-key>` from line 97 with the value previously obtained from Azure.
 
 ### C) Add Text to Speech to bot
 
@@ -826,15 +843,15 @@ For this scenario we will generate the audio SSML in the backend (our bot code).
 1. [] **Add** the following line at the end of the constructor method to initialize the text-to-speech service.:
 
     ```cs
-    _ttsService = new TextToSpeechService(config);
+    _ttsService = new TextToSpeechService(config.Value.VoiceFontName, config.Value.VoiceFontLanguage);
     ```
-1. [] **Modify** the *OnTurn* method. Look for the welcome message `"Hi! I'm a restaurant assistant bot.` and replace the next line to include the audio SSML in the response:
+1. [] **Modify** the *OnTurn* method. Look for the welcome message `"Hi! I'm a restaurant assistant bot.` and replace the next line (`await context.SendActivity(msg);`) to include the audio SSML in the response:
 
     ```cs
     await context.SendActivity(msg, _ttsService.GenerateSsml(msg, BotConstants.EnglishLanguage));
     ```
 
-1. [] **Modify** the *TimeStep* method. Look for the message `When do you need the reservation?`:
+1. [] **Modify** the *TimeStep* method. Look for the message `When do you need the reservation?` and replace the line `await dialogContext.Prompt(PromptStep.TimePrompt, msg);` with the following code:
 
     ```cs
     await dialogContext.Prompt(PromptStep.TimePrompt, msg, new PromptOptions { Speak = _ttsService.GenerateSsml(msg, BotConstants.EnglishLanguage) });
@@ -843,7 +860,7 @@ For this scenario we will generate the audio SSML in the backend (our bot code).
     > [!NOTE] Notice that we set the SSML to the **Speak** Prompt option. As an alternative we could just send the message and the Bot Framework Web Chat will generate the SSML for you, but for this lab we will send the SSML from the backend.
 
 1. [] Repeat the previous step to modify the *Prompts* from `AmountPeopleStep` and `NameStep` methods. Add the following parameter to each Prompt:
-    `new PromptOptions { Speak = _ttsService.GenerateSsml(msg, BotConstants.EnglishLanguage)`
+    `new PromptOptions { Speak = _ttsService.GenerateSsml(msg, BotConstants.EnglishLanguage)}`
 
 1. [] **Modify** the *ConfirmationStep* method. Add the following parameter to each Prompt:
     ```cs
@@ -884,7 +901,8 @@ For the purposes of our lab, we'll be deploying directly from Visual Studio.
 
 1. [] Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
 1. [] Click the **Speech** option.
-1. [] Click the microphone icon once and say ++I need a table reservation++.
+    > [!NOTE] If something is not working make sure that you are using a secure connection by using `https://` in your URL.
+1. [] Click the microphone icon once and say `I need a table reservation`.
 1. [] Wait for the bot to reply, you should get an audio response back.
 1. [] Finish the conversation flow using audio.
 
@@ -907,13 +925,13 @@ In order to compare the performance of the custom speech service, we'll create a
 
 Building a custom language model allows us to improve the vocabulary of our speech model and specify the pronuntiation of specific words.
 
-1. Open `Downloads\talktomybotlab\resources\custom_speech_language_ds.txt` and review its contents. This file contains text examples of queries and utterances expected from users.
+1. Open `Downloads/TalkToMyBot/resources/custom_speech_language_ds Data.txt` and review its contents. This file contains text examples of queries and utterances expected from users.
 1. Click the **Custom Speech** drop-down menu on the top and select **Adaptation Data**.
 1. Click **Import** next to *Language Datasets* and provide the requested information:
     * Name: `Food Language Model`.
-    * Language data file (.txt): navigate and select `Downloads\talktomybotlab\resources\custom_speech_pronunciation_ds.txt` in the `Downloads` folder.
+    * Language data file (.txt): navigate and select `TalkToMyBot/resources/custom_speech_language_ds.txt` in the `Downloads` folder.
 1. Click **Import**. It will display a table with your new dataset. Wait for the **Status** to change to **Complete**.
-1. Open `Downloads\talktomybotlab\resources\custom_speech_pronunciation_ds.txt`. This file contains custom phonetic pronunciations for specific words.
+1. Open `Downloads/resources/custom_speech_pronunciation_ds.txt`. This file contains custom phonetic pronunciations for specific words.
 1. Click the **Custom Speech** drop-down menu on the top and select **Adaptation Data**.
 1. Click **Import** next to *Pronunciation Datasets* and provide the requested information:
     * Name: `Custom Pronunciation Data`.
@@ -922,9 +940,8 @@ Building a custom language model allows us to improve the vocabulary of our spee
 1. Click the **Custom Speech** drop-down menu on the top and select **Language Models**.
 1. Click **Create New** and provide the requested information:
     * Name: `Food Language Model`.
-    * Base Language Model: `Microsoft Search and Dictation Model`.
     * Language Data: auto populated with the sample data previously created.
-    * Pronunciation Data: `Custom Pronuncation Data`.
+    * Pronunciation Data: `Custom Pronunciation Data`.
     * Subscription: auto populated with the subscription previously added.
 1. Click **Create**. It will display a table with your new model. This can take several minutes to complete.
 
@@ -942,7 +959,7 @@ Now that our model has finished building, we can quickly turn it into a web serv
     * Scenario: Universal.
     * Language Model: the model previously created should appear selected
     * Accept terms & conditions
-1. Click **Create**. It will display a table with your new deployment. Wait for the **State** to change to Complete.
+1. Click **Create**. It will display a table with your new deployment. Wait for the **Status** to change to Complete.
 1. Click **Details**. It will display the URLs of your custom endpoint for use with either an HTTP request or with the Microsoft Cognitive Services Speech Client Library (which uses Web Sockets).
 1. Copy the displayed **Endpoint ID** into Notepad as you'll need it later.
     > [!NOTE] Notice the **WebSocket API** endpoint URL (the one marked for audio up to 15 seconds), in the background our Web Chat uses that endpoint to execute the speech to text transcription.
@@ -951,13 +968,13 @@ Now that our model has finished building, we can quickly turn it into a web serv
 
 1. [] **Return** to Visual Studio.
 1. [] Open **default.html** in the **wwwroot** folder.
-1. [] **Replace** the Custom Speech Endpoint Id `custom-speech-endpoint-id` from line 45 with the value previously obtained from Cris dashboard.
+1. [] **Replace** the Custom Speech Endpoint Id `<custom-speech-endpoint-id>` from line 98 with the value previously obtained from Cris dashboard.
 
     > [!NOTE] The prebuilt chat bot already provides support for Custom Speech web sockets, we just have to add the configuration. Notice that we can access all the speech service using the same Speech subscription key.
 
 ### E) Test Custom Speech in Web Chat
 
-In order to compare the Speech service with the Custom Speech model that we configured, we will be using the **risotto** and **calzone** words that are part of the pronunciations dataset. The pronuntiation for these words varies from Italian to English, carefully listen to the output audios and notice the difference as we will be using an Italian accent to try this scenario.
+In order to compare the Speech service with the Custom Speech model that we configured, we will be using the **risotto** and **calzone** words that are part of the pronunciations dataset. The pronunciation for these words varies from Italian to English, carefully listen to the output audios and notice the difference as we will be using an Italian accent to try this scenario.
 
 Follow the next steps to listen the words pronunciation:
 1. [] Open your browser and go to `https://www.bing.com/Translator`.
@@ -994,7 +1011,7 @@ By combining the Translator Speech API with our bot, we can build a solution tha
 
 Before using the Translator Speech service we have to create the resource in Azure.
 
-1. [] Return to the Azure Portal (++portal.azure.com++).
+1. [] Return to the [Azure Portal](https://portal.azure.com) (portal.azure.com).
 1. [] Click **Create Resource [+]**  from the left menu and search for **Translator Speech**.
 1. [] **Select** the *Translator Speech* result and then click the **Create** button.
 1. [] Provide the required information:
@@ -1043,12 +1060,30 @@ The Translator Speech API allows to integrate the service into existing applicat
     options.Middleware.Add(
         new TranslatorSpeechMiddleware(
             Configuration["TranslatorSpeechSubscriptionKey"],
-            Configuration["TranslatorTextSubscriptionKey"]
+            Configuration["TranslatorTextSubscriptionKey"],
+            Configuration["VoiceFontName"],
+            Configuration["VoiceFontLanguage"]
         ));
     ```
     > [!ALERT] Make sure you put this after the LUIS middleware. Otherwise the incoming message will be sent to LUIS *before* it's translated to English (which is the language understood by our LUIS model).
 1. [] Open the **appsettings.json** file.
 1. [] Replace the **<your_translator_speech_subscription_key>** and **<your_translator_text_subscription_key>** values with the keys previously obtained from Azure.
+1. [] Open the **EchoBot.cs** file.
+1. [] IN the `OnTurn` method, and in the switch statement (`switch (topIntent != null ? topIntent.Value.intent : null)`) add the following case before the default case:
+    ```cs
+      case "GetDiscounts":
+        await GetDiscountsHandler(context);
+        break;
+    ```
+1. [] Add the following method to the class:
+    ```cs
+      private async Task GetDiscountsHandler(ITurnContext context)
+      {
+          var msg = "This week we have a 25% discount in all of our wine selection";
+
+          await context.SendActivity(msg);
+      }
+    ```
 
 ### D) Test the speech translation
 
@@ -1060,42 +1095,53 @@ Deploy and test translator speech:
 1. [] Click **Publish** again and wait for the deployment to complete. This step might take a few minutes.
 1. [] Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
 1. [] Click the **Speech** option .
-1. [] Click the **Test bot translator with an audio file** option.
-1. [] Click the **Browse** button and select the file `Downloads\talktomybotlab\resources\discounts_french.wav`.
+1. [] Check the **Test bot translator with an audio file** option.
+1. [] Click the **Browse** button and select the file `Downloads/talktomybotlab/resources/discounts_french.wav`.
 1. [] Select the **French** language from the drop down list.
 
     > [!NOTE] If you want to see all the languages available you can use the languages endpoint: https://dev.microsofttranslator.com/Languages?api-version=1.0&scope=text,speech,tts
 1. [] Click **Submit Audio** and wait for the bot to respond back. This might take a few seconds as it has to upload your audio file.
-1. [] The bot wil respond with audio and with the text "Cette semaine, nous avons un rabais de 25% dans l’ensemble de notre sélection de vins".
+1. [] The bot will respond with audio and with the text "Cette semaine, nous avons un rabais de 25% dans l’ensemble de notre sélection de vins".
 
 ## Custom Voice
 
-Custom Voice provides a way to create custom voices used to generate audio. The custom voices are deployed as fonts, the models are called **Voice Fonts**. We'll create a new font and use it in our bot output.
+Custom Voice provides a way to create custom voices used to generate audio (text-to-speech). The custom voices are deployed as fonts, the models are called **Voice Fonts**. For this lab we are using an existing custom voice that is provided by the Speech service. We will also show you how to create your custom voice fonts and use them in your bot.
 
-### A) Enable custom voice in bot
+### A) Create a Voice Font
 
-1. [] Open **EchoBot.cs**.
-1. [] **Add** the following variables at the beginning of the **EchoBot** class:
+1. [] Prepare your files: a voice training dataset consists of a set of audio files, along with a text file containing the transcripts of all of these audio files. Each audio file should contain a single utterance.
+1. [] After preparing the audio files archive and transcripts, upload them via the [Custom Voice Service Portal](https://cris.ai/Home/CustomVoice). This portal will allow you to create the voice dataset and model.
+1. [] Follow the [instructions](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-customize-voice-font) to create your new voice and deploy your model to an endpoint.
+1. [] Once you create your custom endpoint, copy the **Endpoint Url** and the **Font Name** as you will need them later.
 
-    ```cs
-    private const bool UseCustomVoice = false;
-    ```
-1. [] Open **TextToSpeechService.cs** and see the `GenerateSsml` method. // TODO: finish adding detail
+### B) Add the Voice Font to your bot
 
-### B) Test Voice Font in Web Chat
+Let's modify our bot code to use our new custom voice. If you don't have a custom font you can use one from the Text to Speech API (https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages#text-to-speech).
 
-// TODO: Copy instructions from previous test and modify
+Add the Voice configurations:
+1. Open **appsettings.json** and replace:
+- The *VoiceFontName* value with the one previously obtained.
+- The *VoiceFontLanguage* value with the language of your recording.
+ > [!NOTE] Click (here)[https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages] to see more information about supported messages in Speech Service.
+2. Open **default.htm**, go to the line **111** and replace the *customVoiceEndpointUrl* with your endpoint url.
 
+Deploy and test the voice font:
+1. Go to Visual Studio and **Right-click** the `ChatBot` project.
+1. Click **Publish**.
+1. Click **Publish** again and wait for the deployment to complete. This step might take a few minutes.
+1. Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
+1. Click the **Speech** option and say: `I need a table reservation`.
+1. The bot should respond using the new voice.
 
 ## Adding a Bot to a Web Application
 
 We'll see how simple it is to add the web chat widget to a web application, using the bot deployed in Azure. In `Downloads\talktomybotlab\resources` you will find a folder named `restaurant` with a standalone website, which could easily be replaced with a modern single page application (SPA). You can see this website in action by serving it from an HTTP server or by opening `index.html` in a browser.
 
-### A) Add the Web Chat Libraries**
+### A) Add the Web Chat Libraries
 
 The web chat control that we'll add to the static website will use the same libraries as our bot: `botchat.js` and `CongnitiveServices.js`. These library files have already been placed in the `lib` directory in the website's root folder along with the stylesheet `botchat.css`, which has a set of default styles for the web chat control. To enable these, we'll need to add the corresponding references in the website's index file `index.html`.
 
-1. Find `Downloads\talktomybot\resources\restaurant-lab.zip` and uncompress it in the same directory.
+1. Find `Downloads\talktomybotlab\resources\restaurant-lab.zip` and uncompress it in the same directory.
 1. **Add** in the following snippet **before** the custom web chat stylesheet `bot.css`:
     ```html
     <link href="./lib/botchat.css" rel="stylesheet" />

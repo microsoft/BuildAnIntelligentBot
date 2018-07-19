@@ -13,9 +13,6 @@
     },
     {
       "name": "ReserveTable"
-    },
-    {
-      "name": "TodaysSpecialty"
     }
   ],
   "entities": [
@@ -111,21 +108,6 @@
           "endPos": 29
         }
       ]
-    },
-    {
-      "text": "what is the specialty for today?",
-      "intent": "TodaysSpecialty",
-      "entities": []
-    },
-    {
-      "text": "what's the dish of the day?",
-      "intent": "TodaysSpecialty",
-      "entities": []
-    },
-    {
-      "text": "what's today's special?",
-      "intent": "TodaysSpecialty",
-      "entities": []
     }
   ]
 }
