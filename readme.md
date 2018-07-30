@@ -444,7 +444,7 @@ Now that our bot support LUIS, we'll finish the implementation by using the SDK 
         public const string ConfirmationPrompt = "confirmationPrompt";
     }
     ```
-1. [] **Add** the variable at the beginning of the class**Add** the following variable at the beginning of the EchoBot class:
+1. [] **Add** the following variable at the beginning of the EchoBot class:
     ```cs
     private readonly DialogSet _dialogs;
     ````
@@ -827,7 +827,7 @@ Speech is available as a component called `SpeechRecognizer` in the Web Chat con
 1. [] Open **default.html** in the **wwwroot** folder.
 
     > [!NOTE] The web chat control has already been imported into the page, we just need to configure it. This Web Chat was modified to use the Speech (preview) websockets instead of the general Bing service.
-1. [] **Replace** the `direct-line-secret` from line 104 with the value on clipboard.
+1. [] **Replace** the `direct-line-secret` from line 181 with the value on clipboard.
 1. [] **Replace** the Speech Subscription key `<your-speech-subscription-key>` from line 97 with the value previously obtained from Azure.
 
 ### C) Add Text to Speech to bot
