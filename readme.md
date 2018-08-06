@@ -40,11 +40,9 @@ Follow the next steps to install the *Bot Builder SDK V4 for Visual Studio* temp
 
 Follow the next steps to download the sample code provided for this lab, it includes a prebuilt React front-end that uses the *Bot Framework Web Chat* component and a Chat Bot based in the *Bot Builder SDK V4 for Visual Studio* template.
 
-1. [] Open **Microsoft Edge** and navigate to https://aka.ms/botframeworklab.
-1. [] When prompted, click **Open**.
-1. [] Click **Extract** and then **Extract all**.
-1. [] Click **Browse...** and then **Downloads**.
-1. [] Click **Select Folder** and then **Extract**.
+1. Click **Clone or download** from this repo.
+1. You can clone the repo using git or click **Download ZIP** to directly download the code from your browser.
+  > [!ALERT] Make sure to uncompress/clone your code into **Downloads/buildanintelligentbot**.
 
 ### D) Install Bot Framework Emulator
 
@@ -55,7 +53,7 @@ Follow the next steps to install the *Bot Framework Emulator V4*, if you already
 1. [] When prompted, click **Open**.
 1. [] Complete the installation.
 
-## Create a basic Bot
+## Quickly creating a basic bot
 
 Let's create a basic bot using the SDK V4, we'll run it locally in Visual Studio 2017 using the Bot Framework Emulator.
 
@@ -77,16 +75,15 @@ The bot emulator provides a convenient way to interact and debug your bot locall
 
 1. [] Open the **EchoBot.cs** file.
 1. [] Put a **breakpoint** on line 31.
-1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon) if it's not running already.
+1. [] Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 
     > [!NOTE] A new web page with the Web Chat will be opened in your browser. Don't use this one yet as we'll configure it later.
+1. [] Check the port that your app is using, if it is not running on port **3978** you'll need to update the Bot configuration. In order to update this setting go to Visual Studio and open the **ChatBot.bot** file. Update the **id** and **endpoint** setting to match the port that your app is using.
 1. [] Open the **Bot Framework Emulator** from the Start Menu.
 1. [] Click **Open Bot** and select the file `ChatBot.bot` from your source code.
 
     > [!NOTE] Previously we had to provide the bot endpoint to the emulator but now it can read all the configuration from a file.
-1. [] If the app is not running on port **3978** you need to update the Bot configuration in the emulator. Check the address in the browser windows to confirm the port that the app is using.
-1. If the port is different, right click the **ChatBot** option under **ENDPOINT** and click on the **Edit settings** option. Check the **Endopoint url** configuration and change the port in the address to correspond to the port that the app is using.
-1. [] **Type** ++Hello++ and press enter.
+1. [] **Type** `Hello` and press enter.
 1. [] Return to **Visual Studio** and wait for the breakpoint to be hit.
 1. [] **Mouse over** the `context.Activity.Text` variable to see your input message.
 1. [] Press **Continue** in the toolbar.
@@ -121,7 +118,7 @@ Notice that when you start a conversation the bot is not showing any initial mes
     * **Stop** debugging by clicking the stop button in Visual Studio's toolbar.
 
 
-## Add LUIS to your bot
+## Adding the Language Understanding service to your bot
 
 Language Understanding (LUIS) allows your application to understand what a person wants in their own words. LUIS uses machine learning to allow developers to build applications that can receive user input in natural language and extract meaning from it.
 
@@ -162,7 +159,7 @@ Before calling LUIS, we need to train it with the kinds of phrases we expect our
 1. [] Check the **I agree** checkbox.
 1. [] Click the **Continue** button.
 1. [] From `My Apps`, click **Import new app**.
-1. [] **Select** the base model from `Downloads\talktomybotlab\resources\talk-to-my-bot.json`.
+1. [] **Select** the base model from `Downloads\buildanintelligentbot\resources\talk-to-my-bot.json`.
 1. [] Click on the **Done** button.
 1. [] **Wait** for the import to complete.
 1. [] Click on the **Train** button and wait for it to finish.
@@ -212,7 +209,7 @@ Before we continue adding services to our bot, we'll open the sample code provid
 
 1. [] Click **File** from Visual Studio menu.
 1. [] Click **Open Project/Solution**.
-1. [] Select the **solution file** `Downloads\talktomybotlab\src\TalkToMyBot.sln` and wait for it to load.
+1. [] Select the **solution file** `Downloads\buildanintelligentbot\src\TalkToMyBot.sln` and wait for it to load.
 1. [] Right click the **Solution** and click `Restore NuGet Packages`.
 
 Now let's install the LUIS package from NuGet:
@@ -296,15 +293,16 @@ Let's run the bot to see LUIS in action.
 1. If the port is different, make sure to change the settings in the Bot like it was indicating before.
 1. [] Return to the **Bot Framework Emulator**.
 1. [] Click **File** -> **Open**.
-1. [] Select the **bot file** `Downloads/talktomybotlab/src/ChatBot/ChatBot.bot` and wait for it to load.
+1. [] Select the **bot file** `Downloads/buildanintelligentbot/src/ChatBot/ChatBot.bot` and wait for it to load.
 
     > [!NOTE] We are now using the sample code therefore we have to open a new bot file.
+    > [!ALERT] Remember to adjust your bot endpoint configuration if your app doesn't use the default port 3978.
 1. [] Click the **Start Over** button to start a new conversation.
 1. [] **Type** `what is the specialty for today?` and press enter.
 1. [] See the response, LUIS is processing our input and the bot can handle it accordingly.
 1. [] **Stop** debugging by clicking the stop button in VS toolbar.
 
-## Customising your Bot
+## Adding advanced conversational features to your bot
 
 ### A) Add a visual response to your bot: Carousel
 
@@ -627,7 +625,7 @@ Let's run the bot to see how LUIS processes the new conversation flow.
 1. [] **Remove** the breakpoint previously added.
 
 
-## Adding Knowledge Base to your Bot
+## Adding Knowledge to your Bot with QnA Maker
 
 ### A) Set up QnA Maker
 
@@ -728,7 +726,7 @@ Let's make our bot more user friendly by adding the Personality Chat. This cogni
 1. [] Select the Browse tab and search for `Microsoft.Bot.Builder.PersonalityChat`.
 1. [] Select the NuGet package, select the latest version and click **Install**.
 
-### B) Add Personality Chat to the bot
+### B) Implementing Project Personality Chat
 
 The Bot Builder SDK has native support for adding QnA Maker to your bot.
 
@@ -763,7 +761,7 @@ The Bot Builder SDK has native support for adding QnA Maker to your bot.
 
     > [!NOTE] Review the image below to see which utterances you can try and what output to expect in each case.
 
-## Add Speech Support
+## Adding Speech support (Text-to-Speech and Speech-to-Text)
 
 In this section we will enable speech in Web Chat to recognize speech and send the transcript to the bot. We will also use Text to Speech from Speech (Preview) to generate SSML and send audio back from the Web Chat.
 
@@ -900,13 +898,13 @@ For the purposes of our lab, we'll be deploying directly from Visual Studio.
 ### E) Test in Web Chat
 
 1. [] Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
-1. [] Click the **Speech** option.
+1. [] Click on the **Speech** option.
     > [!NOTE] If something is not working make sure that you are using a secure connection by using `https://` in your URL.
 1. [] Click the microphone icon once and say `I need a table reservation`.
 1. [] Wait for the bot to reply, you should get an audio response back.
 1. [] Finish the conversation flow using audio.
 
-## Add Custom Speech support
+## Adding Custom Speech Support
 
 This section will show you how to get started using the Custom Speech Service to improve the accuracy of speech-to-text transcription in your application. We'll use a Language Model to improve the output of some food domain-specific language.
 
@@ -921,21 +919,21 @@ In order to compare the performance of the custom speech service, we'll create a
     * Subscription Key: *paste speech subscription value previously obtained from Azure Portal*
 1. Click **Add**. It will display a page with the result of your subscription validation.
 
-### B) Create Language Model
+### B) Customize Language Model and Pronunciation
 
 Building a custom language model allows us to improve the vocabulary of our speech model and specify the pronuntiation of specific words.
 
-1. Open `Downloads/TalkToMyBot/resources/custom_speech_language_ds Data.txt` and review its contents. This file contains text examples of queries and utterances expected from users.
+1. Open `Downloads/buildanintelligentbot/resources/custom_speech_language_ds.txt` and review its contents. This file contains text examples of queries and utterances expected from users.
 1. Click the **Custom Speech** drop-down menu on the top and select **Adaptation Data**.
 1. Click **Import** next to *Language Datasets* and provide the requested information:
     * Name: `Food Language Model`.
-    * Language data file (.txt): navigate and select `TalkToMyBot/resources/custom_speech_language_ds.txt` in the `Downloads` folder.
+    * Language data file (.txt): navigate and select `buildanintelligentbot/resources/custom_speech_language_ds.txt` from the `Downloads` folder.
 1. Click **Import**. It will display a table with your new dataset. Wait for the **Status** to change to **Complete**.
-1. Open `Downloads/resources/custom_speech_pronunciation_ds.txt`. This file contains custom phonetic pronunciations for specific words.
+1. Open `Downloads/buildanintelligentbot/resources/custom_speech_pronunciation_ds.txt` and review its contents. This file contains custom phonetic pronunciations for specific words.
 1. Click the **Custom Speech** drop-down menu on the top and select **Adaptation Data**.
 1. Click **Import** next to *Pronunciation Datasets* and provide the requested information:
     * Name: `Custom Pronunciation Data`.
-    * Language data file (.txt): navigate and select `TalkToMyBot/resources/custom_speech_pronunciation_ds.txt` in the `Downloads` folder
+    * Language data file (.txt): navigate and select `buildanintelligentbot/resources/custom_speech_pronunciation_ds.txt` from the `Downloads` folder
 1. Click **Import**. It will display a table with your new dataset. Wait for the **Status** to change to Complete.
 1. Click the **Custom Speech** drop-down menu on the top and select **Language Models**.
 1. Click **Create New** and provide the requested information:
@@ -970,7 +968,7 @@ Now that our model has finished building, we can quickly turn it into a web serv
 1. [] Open **default.html** in the **wwwroot** folder.
 1. [] **Replace** the Custom Speech Endpoint Id `<custom-speech-endpoint-id>` from line 98 with the value previously obtained from Cris dashboard.
 
-    > [!NOTE] The prebuilt chat bot already provides support for Custom Speech web sockets, we just have to add the configuration. Notice that we can access all the speech service using the same Speech subscription key.
+    > [!NOTE] The prebuilt chat bot included in this tutorial already provides support for Custom Speech using web sockets, we just have to add the endpoint id configuration to the web page. Notice how we can access all the speech services using the same Speech subscription key.
 
 ### E) Test Custom Speech in Web Chat
 
@@ -1001,9 +999,9 @@ Deploy and test custom speech:
     * Click the microphone icon once and say ++Do you have **calzone**?++
     * The bot will reply with a response from our Knowledge Base: *We sell calzones only Fridays.*
 
-    > [!NOTE] Notice that Custom Speech is able to pick up the food options that we specified using a different pronunciation. The responses from QnA Maker don't return audio as we only adjusted our main flow for text-to-speech support.
+    > [!NOTE] Notice that Custom Speech is able to pick up the food options that we specified using a different pronunciation.
 
-## Custom Translator (Translator Speech)
+## Adding Speech Translation to your Bot
 
 By combining the Translator Speech API with our bot, we can build a solution that can interact with a global audience using speech and different languages. The service also allows to create and deploy customized neural machine translations (NMT), meaning users can start talking to the bot in whatever language they choose and using a system that understands the terminology used in their specific business and industry. For this lab we won't be using the NMT customization feature, instead we will use the Speech to Text translation capabilites of the service by uploading a prerecorded French audio file. The sample code provides a prebuilt Translator Speech Service that we will use to translate the speech to English and pass the translated transcript to LUIS. Once the bot finishes processing the intent it will respond using audio and French language, for this purpose we will use the Translator Text and the existing Text to Speech capabilities from our bot.
 
@@ -1096,53 +1094,23 @@ Deploy and test translator speech:
 1. [] Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
 1. [] Click the **Speech** option .
 1. [] Check the **Test bot translator with an audio file** option.
-1. [] Click the **Browse** button and select the file `Downloads/talktomybotlab/resources/discounts_french.wav`.
+1. [] Click the **Browse** button and select the file `Downloads/buildanintelligentbot/resources/discounts_french.wav`.
 1. [] Select the **French** language from the drop down list.
 
     > [!NOTE] If you want to see all the languages available you can use the languages endpoint: https://dev.microsofttranslator.com/Languages?api-version=1.0&scope=text,speech,tts
 1. [] Click **Submit Audio** and wait for the bot to respond back. This might take a few seconds as it has to upload your audio file.
 1. [] The bot will respond with audio and with the text "Cette semaine, nous avons un rabais de 25% dans l’ensemble de notre sélection de vins".
 
-## Custom Voice
-
-Custom Voice provides a way to create custom voices used to generate audio (text-to-speech). The custom voices are deployed as fonts, the models are called **Voice Fonts**. For this lab we are using an existing custom voice that is provided by the Speech service. We will also show you how to create your custom voice fonts and use them in your bot.
-
-### A) Create a Voice Font
-
-1. [] Prepare your files: a voice training dataset consists of a set of audio files, along with a text file containing the transcripts of all of these audio files. Each audio file should contain a single utterance.
-1. [] After preparing the audio files archive and transcripts, upload them via the [Custom Voice Service Portal](https://cris.ai/Home/CustomVoice). This portal will allow you to create the voice dataset and model.
-1. [] Follow the [instructions](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-customize-voice-font) to create your new voice and deploy your model to an endpoint.
-1. [] Once you create your custom endpoint, copy the **Endpoint Url** and the **Font Name** as you will need them later.
-
-### B) Add the Voice Font to your bot
-
-Let's modify our bot code to use our new custom voice. If you don't have a custom font you can use one from the Text to Speech API (https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages#text-to-speech).
-
-Add the Voice configurations:
-1. Open **appsettings.json** and replace:
-- The *VoiceFontName* value with the one previously obtained.
-- The *VoiceFontLanguage* value with the language of your recording.
- > [!NOTE] Click (here)[https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages] to see more information about supported messages in Speech Service.
-2. Open **default.htm**, go to the line **111** and replace the *customVoiceEndpointUrl* with your endpoint url.
-
-Deploy and test the voice font:
-1. Go to Visual Studio and **Right-click** the `ChatBot` project.
-1. Click **Publish**.
-1. Click **Publish** again and wait for the deployment to complete. This step might take a few minutes.
-1. Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
-1. Click the **Speech** option and say: `I need a table reservation`.
-1. The bot should respond using the new voice.
-
 ## Adding a Bot to a Web Application
 
-We'll see how simple it is to add the web chat widget to a web application, using the bot deployed in Azure. In `Downloads\talktomybotlab\resources` you will find a folder named `restaurant` with a standalone website, which could easily be replaced with a modern single page application (SPA). You can see this website in action by serving it from an HTTP server or by opening `index.html` in a browser.
+We'll see how simple it is to add the web chat widget to a web application, using the bot deployed in Azure. In `Downloads\buildanintelligentbot\resources` you will find a folder named `restaurant` with a standalone website, which could easily be replaced with a modern single page application (SPA). You can see this website in action by serving it from an HTTP server or by opening `index.html` in a browser.
 
 ### A) Add the Web Chat Libraries
 
 The web chat control that we'll add to the static website will use the same libraries as our bot: `botchat.js` and `CongnitiveServices.js`. These library files have already been placed in the `lib` directory in the website's root folder along with the stylesheet `botchat.css`, which has a set of default styles for the web chat control. To enable these, we'll need to add the corresponding references in the website's index file `index.html`.
 
-1. Find `Downloads\talktomybotlab\resources\restaurant-lab.zip` and uncompress it in the same directory.
-1. **Add** in the following snippet **before** the custom web chat stylesheet `bot.css`:
+1. Find `Downloads\buildanintelligentbot\resources\restaurant-lab.zip` and uncompress it in the same directory.
+1. **Add** the following snippet **before** the custom web chat stylesheet `bot.css`:
     ```html
     <link href="./lib/botchat.css" rel="stylesheet" />
     ```
@@ -1154,7 +1122,7 @@ The web chat control that we'll add to the static website will use the same libr
 
 ### B) Add the Web Chat widget
 
-We'll add the Bot Framework Web Chat control to our static page `index.html`.
+Add the Bot Framework Web Chat control to the static page `index.html`:
     ```html
     <div id="bot"></div>
     ```
@@ -1208,9 +1176,39 @@ Now that we have in place the logic that makes the web chat work and the DOM ele
 
 ### D) Test the bot using the web chat widget
 
-1. Open `index.html` in a browser.
-1. Click the microphone icon and talk to your bot: "What is today's specialty?".
-1. The bot should respond back, now you are able to interact with your existing bot from a new web site.
+1. [] Open `index.html` in a browser.
+1. [] Click on the microphone icon and talk to your bot: "What is today's specialty?".
+1. [] The bot should respond back, now you are able to interact with your existing bot from a new web site.
+
+## Consuming a Custom Voice
+
+Custom Voice provides a way to create custom voices used to generate audio (text-to-speech). The custom voices are deployed as fonts, the models are called **Voice Fonts**. For this lab we are using an existing custom voice that is provided by the Speech service. We will also show you how to create your custom voice fonts and use them in your bot.
+
+### A) Create a Voice Font
+
+1. [] Prepare your files: a voice training dataset consists of a set of audio files, along with a text file containing the transcripts of all of these audio files. Each audio file should contain a single utterance.
+1. [] After preparing the audio files archive and transcripts, upload them via the [Custom Voice Service Portal](https://cris.ai/Home/CustomVoice). This portal will allow you to create the voice dataset and model.
+1. [] Follow the [instructions](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-customize-voice-font) to create your new voice and deploy your model to an endpoint.
+1. [] Once you create your custom endpoint, copy the **Endpoint Url** and the **Font Name** as you will need them later.
+
+### B) Add the Voice Font to your bot
+
+Let's modify our bot code to use our new custom voice. If you don't have a custom font you can use one from the Text to Speech API (https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages#text-to-speech).
+
+Add the Voice configurations:
+1. [] Open **appsettings.json** and replace:
+- The *VoiceFontName* value with the one previously obtained.
+- The *VoiceFontLanguage* value with the language of your recording.
+ > [!NOTE] Click (here)[https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/supported-languages] to see more information about supported messages in Speech Service.
+2. [] Open **default.htm**, go to the line **111** and replace the *customVoiceEndpointUrl* with your endpoint url.
+
+Deploy and test the voice font:
+1. [] Go to Visual Studio and **Right-click** the `ChatBot` project.
+1. [] Click **Publish**.
+1. [] Click **Publish** again and wait for the deployment to complete. This step might take a few minutes.
+1. [] Open your chat bot in a browser: `https://chatbot-<your initials>.azurewebsites.net/`.
+1. [] Click the **Speech** option and say: `I need a table reservation`.
+1. [] The bot should respond using the new voice.
 
 
 *Media Elements and Templates. You may copy and use images, clip art, animations, sounds, music, shapes, video clips and templates provided with the sample application and identified for such use in documents and projects that you create using the sample application. These use rights only apply to your use of the sample application and you may not redistribute such media otherwise.*
