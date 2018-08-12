@@ -29,8 +29,15 @@ Please see the lab team if any of the above steps present any problems.
 Follow the next steps to install the *Bot Builder SDK V4 for Visual Studio* template, if you already have it you can skip this section.
 
 1. [] We will use Visual Studio 2017 with Bot template to develop a bot. If you don't have Visual Studio you can download it from the following URL given below.
-    * Download Visual Studio 2017 from https://www.visualstudio.com/downloads/.
+    * Download Visual Studio 2017 15.6.7 or newer (any edition) from https://www.visualstudio.com/downloads/.
     * Refer Visual Studio 2017 system requirement from https://www.visualstudio.com/en-us/productinfo/vs2017-system-requirements-vs.
+1. [] Open Visual Studio and click on **Tools** from the menu.
+1. [] Click on **Get Tools and Features*. Make sure your Visual Studio has the following workloads:
+    * ASP.NET and web development
+    * Azure development
+    * .NET Core cross-platform development
+    > [!ALERT] Install any of the missing workloads as they are required by the Bot Builder SDK v4.
+
 1. [] Open **Microsoft Edge** and navigate to https://marketplace.visualstudio.com/items?itemName=BotBuilder.botbuilderv4.
 1. [] Click **Download**.
 1. [] When prompted, click **Open**.
@@ -260,7 +267,7 @@ Modify the Bot code to handle the results from LUIS.
     {
         var result = context.Services.Get<RecognizerResult>(LuisRecognizerMiddleware.LuisRecognizerResultKey);
         var topIntent = result?.GetTopScoringIntent();
-        topIntent = topIntent != null &&    topIntent.Value.score < 0.5 ? null : topIntent;
+        topIntent = topIntent != null && topIntent.Value.score < 0.5 ? null : topIntent;
 
         // Your code goes here
     }
