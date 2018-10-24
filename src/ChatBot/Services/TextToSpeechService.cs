@@ -1,8 +1,8 @@
-﻿using ChatBot.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using ChatBot.Models;
 
 namespace ChatBot.Services
 {

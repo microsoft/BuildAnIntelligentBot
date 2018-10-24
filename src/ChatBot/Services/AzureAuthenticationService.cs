@@ -1,8 +1,8 @@
-﻿using ChatBot.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ChatBot.Models;
 
 namespace ChatBot.Services
 {
@@ -38,7 +38,7 @@ namespace ChatBot.Services
         /// cached token for the next 8 minutes. After 8 minutes, a new token is fetched from the token
         /// service and the cache is updated.
         /// </remarks>
-        public static async Task<string> GetAccessToken(string key, string tokenUri = ServiceUrl)
+        public static async Task<string> GetAccessTokenAsync(string key, string tokenUri = ServiceUrl)
         {
             AzureAuthToken azureAuthToken;
 
@@ -49,14 +49,14 @@ namespace ChatBot.Services
                 if ((DateTime.Now - azureAuthToken.LastUpdateTime) > TokenCacheDuration)
                 {
                     // Current token value expires; lets create a new one
-                    azureAuthToken.StoredTokenValue = await GenerateToken(key, tokenUri);
+                    azureAuthToken.StoredTokenValue = await GenerateTokenAsync(key, tokenUri);
                 }
             }
             else
             {
                 // There is not an Object associated to the key,
                 // create a new one an put in into the dictionary
-                var tokenValue = await GenerateToken(key, tokenUri);
+                var tokenValue = await GenerateTokenAsync(key, tokenUri);
                 azureAuthToken = new AzureAuthToken(key, tokenValue);
                 _tokens.Add(key, azureAuthToken);
             }
@@ -64,7 +64,7 @@ namespace ChatBot.Services
             return azureAuthToken.StoredTokenValue;
         }
 
-        private static async Task<string> GenerateToken(string key, string tokenUri)
+        private static async Task<string> GenerateTokenAsync(string key, string tokenUri)
         {
             using (var client = new HttpClient())
             {
