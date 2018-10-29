@@ -111,7 +111,7 @@ Let's create a basic bot using the SDK V4, we'll run it locally in Visual Studio
 The bot emulator provides a convenient way to interact and debug your bot locally.
 
 1. Open the **EchoWithCounterBot.cs** file.
-1. Put a **breakpoint** on line 84.
+1. Put a **breakpoint** on line 79.
 1. Run the app by clicking on the **IIS Express** button in Visual Studio (with the green play icon).
 
     > NOTE: A new web page with the Web Chat will be opened in your browser. Don't use this one yet as we'll configure it later.
